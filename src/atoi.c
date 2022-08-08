@@ -1,3 +1,2 @@
-#define TYPE int
-#define NAME atoi
-#include "atox.c"
+#include "utils.h"
+atox(int,atoi)

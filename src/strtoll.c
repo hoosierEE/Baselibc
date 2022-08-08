@@ -1,3 +1,2 @@
-#define TYPE signed long long
-#define NAME strtoll
-#include "strtox.c"
+#include "utils.h"
+strtox(signed long long,strtoll);

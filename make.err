@@ -1,0 +1,9 @@
+cc -Wall -Isrc/templates -c -o src/memchr.o src/memchr.c
+cc -Wall -Isrc/templates -c -o src/vsscanf.o src/vsscanf.c
+cc -Wall -Isrc/templates -c -o src/strtoul.o src/strtoul.c
+cc -Wall -Isrc/templates -c -o src/strtok.o src/strtok.c
+cc -Wall -Isrc/templates -c -o src/strcat.o src/strcat.c
+cc -Wall -Isrc/templates -c -o src/strtok_r.o src/strtok_r.c
+cc -Wall -Isrc/templates -c -o src/asprintf.o src/asprintf.c
+cc -Wall -Isrc/templates -c -o src/strntoumax.o src/strntoumax.c
+cc -Wall -Isrc/templates -c -o src/tinyprintf.o src/tinyprintf.c

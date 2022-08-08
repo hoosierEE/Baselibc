@@ -1,3 +1,2 @@
-#define TYPE long
-#define NAME atol
-#include "atox.c"
+#include "utils.h"
+atox(long,atol)

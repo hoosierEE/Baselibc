@@ -1,3 +1,2 @@
-#define TYPE uintmax_t
-#define NAME strtoumax
-#include "strtox.c"
+#include "utils.h"
+strtox(uintmax_t,strotoumax);
