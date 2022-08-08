@@ -5,7 +5,7 @@
 #ifndef _INTTYPES_H
 #define _INTTYPES_H
 
-#include <klibc/extern.h>
+#include "klibc.h"
 #include <stdint.h>
 #include <stddef.h>
 

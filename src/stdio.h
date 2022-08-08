@@ -5,8 +5,7 @@
 #ifndef _STDIO_H
 #define _STDIO_H
 
-#include <klibc/extern.h>
-#include <klibc/inline.h>
+#include "klibc.h"
 #include <stdarg.h>
 #include <stddef.h>
 #include <string.h>

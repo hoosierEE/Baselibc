@@ -5,8 +5,7 @@
 #ifndef _STDLIB_H
 #define _STDLIB_H
 
-#include <klibc/extern.h>
-#include <klibc/inline.h>
+#include "klibc.h"
 #include <stddef.h>
 #include <stdbool.h>
 

@@ -5,14 +5,22 @@
 #include <inttypes.h>
 uintmax_t strntoumax(const char*,char**,int,size_t);
 
-#define atox(TYPE,NAME) TYPE NAME(const char*nptr) {                \
+#define atox(NAME,TYPE) TYPE NAME(const char*nptr) {                \
         return (TYPE)strntoumax(nptr, (char **)NULL, 10, ~(size_t)0);}
 
-#define strtox(TYPE,NAME) TYPE NAME(const char *nptr, char **endptr, int base){ \
+#define strtox(NAME,TYPE) TYPE NAME(const char *nptr, char **endptr, int base){ \
         return (TYPE)strntoumax(nptr, endptr, base, ~(size_t)0);}
 
 
-atox(int,atoi);
-atox(long,atol);
-atox(long long,atoll);
+atox(atoi,int);
+atox(atol,long);
+atox(atoll,long long);
+
+strtox(strtoimax,intmax_t);
+strtox(strtol,signed long);
+strtox(strtoll,signed long long);
+strtox(strtoul,unsigned long);
+strtox(strotoumax,uintmax_t);
+strtox(strtoull,unsigned long long);
+
 #endif // UTILS_H_
