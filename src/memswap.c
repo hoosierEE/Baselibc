@@ -5,7 +5,7 @@
  * This really could be done faster...
  */
 
-#include <string.h>
+#include "string.h"
 
 void memswap(void *m1, void *m2, size_t n)
 {

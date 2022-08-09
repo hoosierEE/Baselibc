@@ -6,8 +6,8 @@
  */
 
 #include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
+#include "stdlib.h"
+#include "string.h"
 
 static inline size_t newgap(size_t gap)
 {

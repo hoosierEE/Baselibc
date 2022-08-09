@@ -6,7 +6,7 @@
  * the input.
  */
 
-#include <stdio.h>
+#include "stdio.h"
 
 char *fgets(char *s, int n, FILE *f)
 {

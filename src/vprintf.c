@@ -2,7 +2,7 @@
  * vprintf.c
  */
 
-#include <stdio.h>
+#include "stdio.h"
 #include <stdarg.h>
 
 int vprintf(const char *format, va_list ap)

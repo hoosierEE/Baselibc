@@ -4,9 +4,9 @@
  * Very simple linked-list based malloc()/free().
  */
 
-#include <stdbool.h>
-#include <stdlib.h>
-#include <assert.h>
+/* #include <stdbool.h> */
+#include "stdlib.h"
+/* #include <assert.h> */
 #include "malloc.h"
 
 /* Both the arena list and the free memory list are double linked

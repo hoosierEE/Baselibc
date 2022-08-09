@@ -28,7 +28,7 @@ PORTABILITY
 <<strcspn>> requires no supporting OS subroutines.
  */
 
-#include <string.h>
+#include "string.h"
 
 size_t strcspn(const char *s1, const char *s2)
 {

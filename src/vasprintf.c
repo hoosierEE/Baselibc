@@ -2,8 +2,8 @@
  * vasprintf.c
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "stdio.h"
+#include "stdlib.h"
 #include <stdarg.h>
 
 int vasprintf(char **bufp, const char *format, va_list ap)

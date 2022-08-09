@@ -2,7 +2,7 @@
  * lrand48.c
  */
 
-#include <stdlib.h>
+#include "stdlib.h"
 #include <stdint.h>
 
 extern unsigned short __rand48_seed[3];	/* Common with mrand48.c, srand48.c */

@@ -2,7 +2,7 @@
  * vsprintf.c
  */
 
-#include <stdio.h>
+#include "stdio.h"
 #include <stdint.h>
 #ifndef NO_UNISTD_H
 #include <unistd.h>

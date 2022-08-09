@@ -2,9 +2,9 @@
  * asprintf.c
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stdarg.h>
+#include "stdio.h"
+#include "stdlib.h"
+#include "stdarg.h"
 
 int asprintf(char **bufp, const char *format, ...)
 {

@@ -1,4 +1,4 @@
-CFLAGS += -g -Wall -Werror -Isrc
+CFLAGS += -Wall -Werror
 CSRC = $(wildcard src/*.c)
 OBJS = $(CSRC:.c=.o)
 all: libc.a

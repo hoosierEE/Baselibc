@@ -28,7 +28,7 @@ PORTABILITY
 <<strpbrk>> requires no supporting OS subroutines.
 */
 
-#include <string.h>
+#include "string.h"
 
 char *strpbrk(const char *s1, const char *s2)
 {

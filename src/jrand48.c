@@ -2,7 +2,7 @@
  * jrand48.c
  */
 
-#include <stdlib.h>
+#include "stdlib.h"
 #include <stdint.h>
 
 long jrand48(unsigned short xsubi[3])

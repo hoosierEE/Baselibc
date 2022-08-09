@@ -5,13 +5,13 @@
  * family is built
  */
 
-#include <ctype.h>
+#include "ctype.h"
 #include <stdarg.h>
 #include <stddef.h>
-#include <inttypes.h>
-#include <string.h>
+#include "inttypes.h"
+#include "string.h"
 #include <limits.h>
-#include <stdio.h>
+#include "stdio.h"
 
 #ifndef LONG_BIT
 #define LONG_BIT (CHAR_BIT*sizeof(long))

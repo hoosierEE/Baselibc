@@ -2,7 +2,7 @@
 #define UTILS_H_
 
 #include <stddef.h>
-#include <inttypes.h>
+#include "inttypes.h"
 uintmax_t strntoumax(const char*,char**,int,size_t);
 
 #define atox(NAME,TYPE) TYPE NAME(const char*nptr) {                \

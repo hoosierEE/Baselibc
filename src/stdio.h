@@ -8,7 +8,7 @@
 #include "klibc.h"
 #include <stdarg.h>
 #include <stddef.h>
-#include <string.h>
+#include "string.h"
 
 /* The File structure is designed to be compatible with ChibiOS/RT type
  * BaseSequentialStream.

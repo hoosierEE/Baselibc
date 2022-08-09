@@ -2,7 +2,7 @@
  * strtok.c
  */
 
-#include <string.h>
+#include "string.h"
 
 char *strtok(char *s, const char *delim)
 {
