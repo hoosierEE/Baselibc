@@ -7,8 +7,7 @@
 #ifndef _CTYPE_H
 #define _CTYPE_H
 
-#include <klibc/extern.h>
-#include <klibc/inline.h>
+#include "klibc.h"
 
 __extern_inline int isupper(int __c)
 {

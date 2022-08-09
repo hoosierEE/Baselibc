@@ -5,7 +5,8 @@
 #ifndef _STRING_H
 #define _STRING_H
 
-#include <klibc/extern.h>
+/* #include <klibc/extern.h> */
+#include "klibc.h"
 #include <stddef.h>
 
 __extern void *memccpy(void *, const void *, int, size_t);
