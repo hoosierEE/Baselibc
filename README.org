@@ -1,16 +1,11 @@
 * Single-File Baselibc
-This is a very simple libc for embedded systems.
-Mainly geared for 32-bit microcontrollers in the 10-100kB memory range.
-This code is derived from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], which in turn is based on klibc and tinyprintf modules, and licensed under the BSD license.
+A very simple libc, further simplified.
+
+It is derived from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], which in turn is based on klibc and tinyprintf modules, and licensed under the BSD license.
 
 * Dependencies
 After flattening the original Baselibc directory structure, the following files exist in the =src/= directory:
 
-#+begin_src shell
-ls src/*.c src/*.h
-#+end_src
-
-#+RESULTS:
 | src/asprintf.c | src/memcpy.c  | src/strcasecmp.c  | src/strnlen.c    |
 | src/assert.h   | src/memfile.c | src/strcat.c      | src/strntoimax.c |
 | src/bsearch.c  | src/memmem.c  | src/strchr.c      | src/strntoumax.c |
@@ -28,12 +23,12 @@ ls src/*.c src/*.h
 | src/memchr.c   | src/stdio.h   | src/strncpy.c     | src/vsprintf.c   |
 | src/memcmp.c   | src/stdlib.h  | src/strndup.c     | src/vsscanf.c    |
 
-Most of these files depend on one or more header files.
-We can find them automatically by asking the compiler to generate a "depfile" for us (e.g. =gcc -MMD -MF file.d -c file.o file.c=).
-Note that using =-MD= will also include system headers in addition to user headers.
-In this case, I only want the user headers.
+Most of these files depend on one or more header files, for example =bsearch.c= depends on =stdlib.h= and =klibc.h=.
+We can find dependencies automatically by asking the compiler with =cc -MMD -MF file.d -c file.o file.c=.
+Note that using =-MD= will include system headers in addition to user headers.
+In this case, we only want to know about the user headers.
 
-The contents of each of these depfiles is =<src>: <dep>+= and multiple lines are punctuated by =\= characters, presumably to facilitate consumption by another program.
+Their contents look like this:
 #+begin_src shell :results output :exports both
 ls src/*.d | head -n 4 | xargs cat
 #+end_src
@@ -46,7 +41,6 @@ ls src/*.d | head -n 4 | xargs cat
 : src/calloc.o: src/calloc.c src/stdlib.h src/klibc.h src/string.h
 
 To better visualize these dependencies, we will make a visual graph.
-
 #+name: deps
 #+begin_src python :results output :exports none
 import glob
@@ -203,7 +197,7 @@ for k,v in d.items():
 "realloc.c"->"malloc.h"
 #+end_example
 
-#+headers: :file deps.pdf :cmdline -Tpdf
+#+headers: :file deps.png :cmdline -Tpng
 #+begin_src dot :var graph=deps :exports results
 digraph {
 rankdir=LR
@@ -212,4 +206,4 @@ $graph
 #+end_src
 
 #+RESULTS:
-[[file:deps.pdf]]
+[[file:deps.png]]
