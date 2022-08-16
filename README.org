@@ -201,10 +201,9 @@ for k,v in d.items():
 "bsearch.c"->"stdlib.h"
 "asprintf.c"->"stdlib.h"
 "realloc.c"->"malloc.h"
-"malloc.c"->"malloc.h"
 #+end_example
 
-#+headers: :file triangle-hardcoded.pdf :cmdline -Tpdf
+#+headers: :file deps.pdf :cmdline -Tpdf
 #+begin_src dot :var graph=deps :exports results
 digraph {
 rankdir=LR
@@ -213,4 +212,4 @@ $graph
 #+end_src
 
 #+RESULTS:
-[[file:triangle-hardcoded.pdf]]
+[[file:deps.pdf]]
