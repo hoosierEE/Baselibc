@@ -1,15 +1,41 @@
-#include <stdint.h>
 #include <stddef.h>
-
-#include "stdlib.h"
+#include "inttypes.h"
 #include "string.h"
 
+uintmax_t strntoumax(const char*,char**,int,size_t);
+#define atox(NAME,TYPE) TYPE NAME(const char*nptr) {                \
+        return (TYPE)strntoumax(nptr, (char **)NULL, 10, ~(size_t)0);}
+#define strtox(NAME,TYPE) TYPE NAME(const char *nptr, char **endptr, int base){ \
+        return (TYPE)strntoumax(nptr, endptr, base, ~(size_t)0);}
+atox(atoi,int);
+atox(atol,long);
+atox(atoll,long long);
+strtox(strtoimax,intmax_t);
+strtox(strtol,signed long);
+strtox(strtoll,signed long long);
+strtox(strtoul,unsigned long);
+strtox(strotoumax,uintmax_t);
+strtox(strtoull,unsigned long long);
+
+/*
+ * malloc.c
+ *
+ * Very simple linked-list based malloc()/free().
+ */
+
+/* #include <stdbool.h> */
+#include "stdlib.h"
+/* #include <assert.h> */
+/* #include "malloc.h" */
 /* BEGIN_malloc.h */
 /*
  * malloc.h
  *
  * Internals for the memory allocator
  */
+
+#include <stdint.h>
+#include <stddef.h>
 
 /*
  * This structure should be a power of two.  This becomes the
@@ -46,12 +72,6 @@ struct free_arena_header {
 };
 
 /* END_malloc.h */
-
-/*
- * malloc.c
- *
- * Very simple linked-list based malloc()/free().
- */
 
 
 /* Both the arena list and the free memory list are double linked
@@ -199,7 +219,7 @@ void *malloc(size_t size)
 
         if (!malloc_lock())
                 return NULL;
-        
+
         void *result = NULL;
 	for (fp = __malloc_head.next_free; fp->a.type != ARENA_TYPE_HEAD;
 	     fp = fp->next_free) {
@@ -228,7 +248,7 @@ void add_malloc_block(void *buf, size_t size)
 	   the work is logically identical to free(). */
 	fp->a.type = ARENA_TYPE_FREE;
 	fp->a.size = size;
-        
+
         if (!malloc_lock())
             return;
 
@@ -251,7 +271,7 @@ void add_malloc_block(void *buf, size_t size)
 
 	/* Insert into the free chain and coalesce with adjacent blocks */
 	fp = __free_block(fp);
-        
+
         malloc_unlock();
 }
 
@@ -271,7 +291,7 @@ void free(void *ptr)
 
         if (!malloc_lock())
             return;
-        
+
 	/* Merge into adjacent free blocks */
 	ah = __free_block(ah);
         malloc_unlock();
@@ -285,14 +305,14 @@ void get_malloc_memory_status(size_t *free_bytes, size_t *largest_block)
 
     if (!malloc_lock())
             return;
-    
+
     for (fp = __malloc_head.next_free; fp->a.type != ARENA_TYPE_HEAD; fp = fp->next_free) {
         *free_bytes += fp->a.size;
         if (fp->a.size >= *largest_block) {
             *largest_block = fp->a.size;
         }
     }
-    
+
     malloc_unlock();
 }
 
@@ -302,15 +322,22 @@ void set_malloc_locking(malloc_lock_t lock, malloc_unlock_t unlock)
         malloc_lock = lock;
     else
         malloc_lock = &malloc_lock_nop;
-    
+
     if (unlock)
         malloc_unlock = unlock;
     else
         malloc_unlock = &malloc_unlock_nop;
 }
+
+
 /*
  * realloc.c
  */
+
+#include "stdlib.h"
+#include "string.h"
+
+/* #include "malloc.h" */
 
 /* FIXME: This is cheesy, it should be fixed later */
 
@@ -350,22 +377,4 @@ void *realloc(void *ptr, size_t size)
 
 		return newptr;
 	}
-}
-
-/*
- * calloc.c
- */
-
-/* FIXME: This should look for multiplication overflow */
-
-void *calloc(size_t nmemb, size_t size)
-{
-	void *ptr;
-
-	size *= nmemb;
-	ptr = malloc(size);
-	if (ptr)
-		memset(ptr, 0, size);
-
-	return ptr;
 }

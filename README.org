@@ -1,0 +1,216 @@
+* Single-File Baselibc
+This is a very simple libc for embedded systems.
+Mainly geared for 32-bit microcontrollers in the 10-100kB memory range.
+This code is derived from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], which in turn is based on klibc and tinyprintf modules, and licensed under the BSD license.
+
+* Dependencies
+After flattening the original Baselibc directory structure, the following files exist in the =src/= directory:
+
+#+begin_src shell
+ls src/*.c src/*.h
+#+end_src
+
+#+RESULTS:
+| src/asprintf.c | src/memcpy.c  | src/strcasecmp.c  | src/strnlen.c    |
+| src/assert.h   | src/memfile.c | src/strcat.c      | src/strntoimax.c |
+| src/bsearch.c  | src/memmem.c  | src/strchr.c      | src/strntoumax.c |
+| src/bzero.c    | src/memmove.c | src/strcmp.c      | src/strpbrk.c    |
+| src/calloc.c   | src/memrchr.c | src/strcpy.c      | src/strrchr.c    |
+| src/ctype.h    | src/memset.c  | src/strcspn.c     | src/strsep.c     |
+| src/fgets.c    | src/memswap.c | src/strdup.c      | src/strspn.c     |
+| src/inttypes.h | src/mrand48.c | src/string.h      | src/strstr.c     |
+| src/jrand48.c  | src/nrand48.c | src/strlcat.c     | src/strtok.c     |
+| src/klibc.h    | src/qsort.c   | src/strlcpy.c     | src/strtok_r.c   |
+| src/lrand48.c  | src/realloc.c | src/strlen.c      | src/tinyprintf.c |
+| src/malloc.c   | src/sprintf.c | src/strncasecmp.c | src/utils.h      |
+| src/malloc.h   | src/srand48.c | src/strncat.c     | src/vasprintf.c  |
+| src/memccpy.c  | src/sscanf.c  | src/strncmp.c     | src/vprintf.c    |
+| src/memchr.c   | src/stdio.h   | src/strncpy.c     | src/vsprintf.c   |
+| src/memcmp.c   | src/stdlib.h  | src/strndup.c     | src/vsscanf.c    |
+
+Most of these files depend on one or more header files.
+We can find them automatically by asking the compiler to generate a "depfile" for us (e.g. =gcc -MMD -MF file.d -c file.o file.c=).
+Note that using =-MD= will also include system headers in addition to user headers.
+In this case, I only want the user headers.
+
+The contents of each of these depfiles is =<src>: <dep>+= and multiple lines are punctuated by =\= characters, presumably to facilitate consumption by another program.
+#+begin_src shell :results output :exports both
+ls src/*.d | head -n 4 | xargs cat
+#+end_src
+
+#+RESULTS:
+: src/asprintf.o: src/asprintf.c src/stdio.h src/klibc.h src/string.h \
+:   src/stdlib.h
+: src/bsearch.o: src/bsearch.c src/stdlib.h src/klibc.h
+: src/bzero.o: src/bzero.c src/string.h src/klibc.h
+: src/calloc.o: src/calloc.c src/stdlib.h src/klibc.h src/string.h
+
+To better visualize these dependencies, we will make a visual graph.
+
+#+name: deps
+#+begin_src python :results output :exports none
+import glob
+def fn(d,src):
+  with open(src) as f:
+    lines = f.read()
+  _,f,*deps = (lines.replace('src/','').replace('\\\n  ','').split())
+  for dep in deps:
+    d[dep] = d.get(dep,[]) + [f]
+
+d = {}
+for src in glob.glob('src/*.d'):
+  fn(d,src)
+
+for k,v in d.items():
+  for f in v:
+    print(f'"{f}"->"{k}"')
+#+end_src
+
+#+RESULTS: deps
+#+begin_example
+"memcpy.c"->"string.h"
+"vsscanf.c"->"string.h"
+"strchr.c"->"string.h"
+"strcspn.c"->"string.h"
+"strtok.c"->"string.h"
+"strspn.c"->"string.h"
+"strncat.c"->"string.h"
+"strsep.c"->"string.h"
+"strcasecmp.c"->"string.h"
+"memrchr.c"->"string.h"
+"memfile.c"->"string.h"
+"memswap.c"->"string.h"
+"strncasecmp.c"->"string.h"
+"strlcpy.c"->"string.h"
+"strstr.c"->"string.h"
+"strcat.c"->"string.h"
+"strnlen.c"->"string.h"
+"vsprintf.c"->"string.h"
+"memcmp.c"->"string.h"
+"strpbrk.c"->"string.h"
+"strlen.c"->"string.h"
+"sprintf.c"->"string.h"
+"qsort.c"->"string.h"
+"memccpy.c"->"string.h"
+"strncmp.c"->"string.h"
+"strdup.c"->"string.h"
+"vasprintf.c"->"string.h"
+"vprintf.c"->"string.h"
+"sscanf.c"->"string.h"
+"calloc.c"->"string.h"
+"strrchr.c"->"string.h"
+"realloc.c"->"string.h"
+"memmove.c"->"string.h"
+"strtok_r.c"->"string.h"
+"strndup.c"->"string.h"
+"strcmp.c"->"string.h"
+"bzero.c"->"string.h"
+"memset.c"->"string.h"
+"strcpy.c"->"string.h"
+"memchr.c"->"string.h"
+"strlcat.c"->"string.h"
+"tinyprintf.c"->"string.h"
+"strncpy.c"->"string.h"
+"memmem.c"->"string.h"
+"fgets.c"->"string.h"
+"asprintf.c"->"string.h"
+"memcpy.c"->"klibc.h"
+"vsscanf.c"->"klibc.h"
+"strchr.c"->"klibc.h"
+"mrand48.c"->"klibc.h"
+"strcspn.c"->"klibc.h"
+"strtok.c"->"klibc.h"
+"strspn.c"->"klibc.h"
+"strncat.c"->"klibc.h"
+"strsep.c"->"klibc.h"
+"strcasecmp.c"->"klibc.h"
+"memrchr.c"->"klibc.h"
+"memfile.c"->"klibc.h"
+"memswap.c"->"klibc.h"
+"strncasecmp.c"->"klibc.h"
+"strlcpy.c"->"klibc.h"
+"strstr.c"->"klibc.h"
+"strcat.c"->"klibc.h"
+"lrand48.c"->"klibc.h"
+"strnlen.c"->"klibc.h"
+"strntoumax.c"->"klibc.h"
+"nrand48.c"->"klibc.h"
+"vsprintf.c"->"klibc.h"
+"memcmp.c"->"klibc.h"
+"strpbrk.c"->"klibc.h"
+"strlen.c"->"klibc.h"
+"sprintf.c"->"klibc.h"
+"qsort.c"->"klibc.h"
+"srand48.c"->"klibc.h"
+"memccpy.c"->"klibc.h"
+"strncmp.c"->"klibc.h"
+"strdup.c"->"klibc.h"
+"vasprintf.c"->"klibc.h"
+"vprintf.c"->"klibc.h"
+"sscanf.c"->"klibc.h"
+"calloc.c"->"klibc.h"
+"strrchr.c"->"klibc.h"
+"jrand48.c"->"klibc.h"
+"realloc.c"->"klibc.h"
+"memmove.c"->"klibc.h"
+"strtok_r.c"->"klibc.h"
+"strndup.c"->"klibc.h"
+"strcmp.c"->"klibc.h"
+"bzero.c"->"klibc.h"
+"malloc.c"->"klibc.h"
+"memset.c"->"klibc.h"
+"strcpy.c"->"klibc.h"
+"memchr.c"->"klibc.h"
+"bsearch.c"->"klibc.h"
+"strlcat.c"->"klibc.h"
+"tinyprintf.c"->"klibc.h"
+"strncpy.c"->"klibc.h"
+"memmem.c"->"klibc.h"
+"strntoimax.c"->"klibc.h"
+"fgets.c"->"klibc.h"
+"asprintf.c"->"klibc.h"
+"vsscanf.c"->"ctype.h"
+"strcasecmp.c"->"ctype.h"
+"strncasecmp.c"->"ctype.h"
+"strntoumax.c"->"ctype.h"
+"vsscanf.c"->"inttypes.h"
+"strntoumax.c"->"inttypes.h"
+"strntoimax.c"->"inttypes.h"
+"vsscanf.c"->"stdio.h"
+"memfile.c"->"stdio.h"
+"vsprintf.c"->"stdio.h"
+"sprintf.c"->"stdio.h"
+"vasprintf.c"->"stdio.h"
+"vprintf.c"->"stdio.h"
+"sscanf.c"->"stdio.h"
+"tinyprintf.c"->"stdio.h"
+"fgets.c"->"stdio.h"
+"asprintf.c"->"stdio.h"
+"mrand48.c"->"stdlib.h"
+"lrand48.c"->"stdlib.h"
+"nrand48.c"->"stdlib.h"
+"qsort.c"->"stdlib.h"
+"srand48.c"->"stdlib.h"
+"strdup.c"->"stdlib.h"
+"vasprintf.c"->"stdlib.h"
+"calloc.c"->"stdlib.h"
+"jrand48.c"->"stdlib.h"
+"realloc.c"->"stdlib.h"
+"strndup.c"->"stdlib.h"
+"malloc.c"->"stdlib.h"
+"bsearch.c"->"stdlib.h"
+"asprintf.c"->"stdlib.h"
+"realloc.c"->"malloc.h"
+"malloc.c"->"malloc.h"
+#+end_example
+
+#+headers: :file triangle-hardcoded.pdf :cmdline -Tpdf
+#+begin_src dot :var graph=deps :exports results
+digraph {
+rankdir=LR
+$graph
+}
+#+end_src
+
+#+RESULTS:
+[[file:triangle-hardcoded.pdf]]
