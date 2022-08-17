@@ -6,39 +6,39 @@ It is derived from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], wh
 * Dependencies
 After flattening the original Baselibc directory structure, the following files exist in the =src/= directory:
 
-| src/asprintf.c | src/memcpy.c  | src/strcasecmp.c  | src/strnlen.c    |
-| src/assert.h   | src/memfile.c | src/strcat.c      | src/strntoimax.c |
-| src/bsearch.c  | src/memmem.c  | src/strchr.c      | src/strntoumax.c |
-| src/bzero.c    | src/memmove.c | src/strcmp.c      | src/strpbrk.c    |
-| src/calloc.c   | src/memrchr.c | src/strcpy.c      | src/strrchr.c    |
-| src/ctype.h    | src/memset.c  | src/strcspn.c     | src/strsep.c     |
-| src/fgets.c    | src/memswap.c | src/strdup.c      | src/strspn.c     |
-| src/inttypes.h | src/mrand48.c | src/string.h      | src/strstr.c     |
-| src/jrand48.c  | src/nrand48.c | src/strlcat.c     | src/strtok.c     |
-| src/klibc.h    | src/qsort.c   | src/strlcpy.c     | src/strtok_r.c   |
-| src/lrand48.c  | src/realloc.c | src/strlen.c      | src/tinyprintf.c |
-| src/malloc.c   | src/sprintf.c | src/strncasecmp.c | src/utils.h      |
-| src/malloc.h   | src/srand48.c | src/strncat.c     | src/vasprintf.c  |
-| src/memccpy.c  | src/sscanf.c  | src/strncmp.c     | src/vprintf.c    |
-| src/memchr.c   | src/stdio.h   | src/strncpy.c     | src/vsprintf.c   |
-| src/memcmp.c   | src/stdlib.h  | src/strndup.c     | src/vsscanf.c    |
+| asprintf.c | memcpy.c  | strcasecmp.c  | strnlen.c    |
+| assert.h   | memfile.c | strcat.c      | strntoimax.c |
+| bsearch.c  | memmem.c  | strchr.c      | strntoumax.c |
+| bzero.c    | memmove.c | strcmp.c      | strpbrk.c    |
+| calloc.c   | memrchr.c | strcpy.c      | strrchr.c    |
+| ctype.h    | memset.c  | strcspn.c     | strsep.c     |
+| fgets.c    | memswap.c | strdup.c      | strspn.c     |
+| inttypes.h | mrand48.c | string.h      | strstr.c     |
+| jrand48.c  | nrand48.c | strlcat.c     | strtok.c     |
+| klibc.h    | qsort.c   | strlcpy.c     | strtok_r.c   |
+| lrand48.c  | realloc.c | strlen.c      | tinyprintf.c |
+| malloc.c   | sprintf.c | strncasecmp.c | utils.h      |
+| malloc.h   | srand48.c | strncat.c     | vasprintf.c  |
+| memccpy.c  | sscanf.c  | strncmp.c     | vprintf.c    |
+| memchr.c   | stdio.h   | strncpy.c     | vsprintf.c   |
+| memcmp.c   | stdlib.h  | strndup.c     | vsscanf.c    |
 
-Most of these files depend on one or more header files, for example =bsearch.c= depends on =stdlib.h= and =klibc.h=.
+Most of these files depend on one or more other files from the same directory, for example =bsearch.c= depends on =stdlib.h= and =klibc.h=.
+Most also depend on one or more "system" headers, which are provided by the operating system.
 We can find dependencies automatically by asking the compiler with =cc -MMD -MF file.d -c file.o file.c=.
-Note that using =-MD= will include system headers in addition to user headers.
-In this case, we only want to know about the user headers.
+Using =-MD= instead of =-MMD= also includes system headers, but for now we only want to find user headers.
 
 Their contents look like this:
-#+begin_src shell :results output :exports both
-ls src/*.d | head -n 4 | xargs cat
+#+begin_src shell :results output :exports results
+ls src/*.d | head -n 4 | xargs cat | sed -e 's/src\///g'
 #+end_src
 
 #+RESULTS:
-: src/asprintf.o: src/asprintf.c src/stdio.h src/klibc.h src/string.h \
-:   src/stdlib.h
-: src/bsearch.o: src/bsearch.c src/stdlib.h src/klibc.h
-: src/bzero.o: src/bzero.c src/string.h src/klibc.h
-: src/calloc.o: src/calloc.c src/stdlib.h src/klibc.h src/string.h
+: asprintf.o: asprintf.c stdio.h klibc.h string.h \
+:   stdlib.h
+: bsearch.o: bsearch.c stdlib.h klibc.h
+: bzero.o: bzero.c string.h klibc.h
+: fgets.o: fgets.c stdio.h klibc.h string.h
 
 To better visualize these dependencies, we will make a visual graph.
 #+name: deps
@@ -197,7 +197,7 @@ for k,v in d.items():
 "realloc.c"->"malloc.h"
 #+end_example
 
-#+headers: :file deps.png :cmdline -Tpng
+#+headers: :file deps.pdf :cmdline -Tpdf
 #+begin_src dot :var graph=deps :exports results
 digraph {
 rankdir=LR
@@ -206,4 +206,4 @@ $graph
 #+end_src
 
 #+RESULTS:
-[[file:deps.png]]
+[[file:deps.pdf]]
