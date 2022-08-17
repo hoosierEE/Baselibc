@@ -1,11 +1,9 @@
 * Single-File Baselibc
-A very simple libc, further simplified.
-
-It is derived from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], which in turn is based on klibc and tinyprintf modules, and licensed under the BSD license.
+An even-more simplified libc.
+This project from [[https://github.com/PetteriAimonen/Baselibc/][Baselibc]], which in turn is based on klibc and tinyprintf modules, and licensed under the BSD license.
 
 * Dependencies
-After flattening the original Baselibc directory structure, the following files exist in the =src/= directory:
-
+After flattening the original Baselibc directory structure, the following files existed in the =src/= directory:
 | asprintf.c | memcpy.c  | strcasecmp.c  | strnlen.c    |
 | assert.h   | memfile.c | strcat.c      | strntoimax.c |
 | bsearch.c  | memmem.c  | strchr.c      | strntoumax.c |
@@ -39,6 +37,7 @@ ls src/*.d | head -n 4 | xargs cat | sed -e 's/src\///g'
 : bsearch.o: bsearch.c stdlib.h klibc.h
 : bzero.o: bzero.c string.h klibc.h
 : fgets.o: fgets.c stdio.h klibc.h string.h
+: ... (many more omitted for clarity)
 
 To better visualize these dependencies, we will make a visual graph.
 #+name: deps
@@ -197,7 +196,7 @@ for k,v in d.items():
 "realloc.c"->"malloc.h"
 #+end_example
 
-#+headers: :file deps.pdf :cmdline -Tpdf
+#+headers: :file deps.png :cmdline -Tpng
 #+begin_src dot :var graph=deps :exports results
 digraph {
 rankdir=LR
@@ -206,4 +205,19 @@ $graph
 #+end_src
 
 #+RESULTS:
-[[file:deps.pdf]]
+[[file:deps.png]]
+
+After condensing all sources into one C file, the system headers remain, so we show them now.
+These headers depend on the architecture and operating system used to compile the library.
+In this example, 
+
+#+headers: :file sysdeps.png :cmdline -Tpng
+#+begin_src dot :var graph=deps :exports results
+digraph {
+rankdir=LR
+$graph
+}
+#+end_src
+
+#+RESULTS:
+[[file:sysdeps.png]]
