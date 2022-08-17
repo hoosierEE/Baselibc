@@ -209,7 +209,7 @@ $graph
 
 After condensing all sources into one C file, the system headers remain, so we show them now.
 These headers depend on the architecture and operating system used to compile the library.
-In this example, 
+In this example, =src/lib.c= was compiled on MacOSX with an Apple M1 CPU.
 
 #+headers: :file sysdeps.png :cmdline -Tpng
 #+begin_src dot :var graph=deps :exports results
