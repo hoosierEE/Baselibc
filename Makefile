@@ -5,6 +5,6 @@ DEPS := $(CSRC:%.c=%.d)
 all: libc.a
 %.o:%.c; $(CC) -MD -MF $*.d $(CFLAGS) -c -o $@ $<
 clean:; $(RM) -r $(OBJS) $(DEPS) libc.a
-libc.a:$(OBJS) $(DEPS); $(RM) $@; $(AR) ru $@ $^
+libc.a:$(OBJS); $(RM) $@; $(AR) ru $@ $^
 $(DEPS):
 include $(wildcard $(DEPS))

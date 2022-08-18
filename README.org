@@ -23,7 +23,7 @@ After flattening the original Baselibc directory structure, the following files 
 
 Most of these files depend on one or more other files from the same directory, for example =bsearch.c= depends on =stdlib.h= and =klibc.h=.
 Most also depend on one or more "system" headers, which are provided by the operating system.
-We can find dependencies automatically by asking the compiler with =cc -MMD -MF file.d -c file.o file.c=.
+We can [[https://make.mad-scientist.net/papers/advanced-auto-dependency-generation/#combine][find dependencies]] [[https://www.gnu.org/software/make/manual/html_node/Automatic-Variables.html][automatically]] [[https://stackoverflow.com/a/5584472/2037637][by asking]] the compiler with =cc -MMD -MF file.d -c file.o file.c=.
 Using =-MD= instead of =-MMD= also includes system headers, but for now we only want to find user headers.
 
 Their contents look like this:
