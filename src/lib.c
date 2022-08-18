@@ -2,11 +2,13 @@
 #include <stdarg.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #ifndef NO_UNISTD_H
 #include <unistd.h>
 #endif
 
+/* * klibc.h */
 #ifndef KLIBC_H_
 #define KLIBC_H_
 #ifdef __cplusplus
@@ -19,6 +21,7 @@
 #define __extern_inline extern inline __attribute__((gnu_inline))
 #endif
 #endif // KLIBC_H_
+
 /* * assert.h */
 #ifndef _ASSERT_H
 #define _ASSERT_H
@@ -276,7 +279,6 @@ __extern char *strtok_r(char *, const char *, char **);
 /* * stdlib.h */
 #ifndef _STDLIB_H
 #define _STDLIB_H
-#include <stdbool.h>
 __extern_inline int abs(int __n) {return (__n < 0) ? -__n : __n;}
 __extern int atoi(const char *);
 __extern long atol(const char *);
@@ -398,7 +400,7 @@ FILE *fmemopen_w(struct MemFile* storage, char *buffer, size_t size);
 // headers above, regular libraries below this line
 //
 
-uintmax_t strntoumax(const char*,char**,int,size_t);
+/* uintmax_t strntoumax(const char*,char**,int,size_t); */
 #define atox(NAME,TYPE) TYPE NAME(const char*nptr) {                \
         return (TYPE)strntoumax(nptr, (char **)NULL, 10, ~(size_t)0);}
 #define strtox(NAME,TYPE) TYPE NAME(const char *nptr, char **endptr, int base){ \
